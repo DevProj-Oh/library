@@ -57,20 +57,16 @@ class BookReservationTest extends TestCase
      */
     public function a_book_can_be_updated()
     {
-        $this->post('books', [
-            'title' => 'Cool Book Title',
-            'author' => 'hui-ho',
-        ]);
-
-        $book = Book::first();
+        $book = factory(Book::class)->create();
 
         $response = $this->patch('books/' . $book->id, [
             'title' => 'New Title',
             'author' => 'New Author',
         ]);
 
-        $this->assertEquals('New Title', Book::first()->title);
-        $this->assertEquals('New Author', Book::first()->author);
+        $book->refresh();
+        $this->assertEquals('New Title', $book->title);
+        $this->assertEquals('New Author', $book->author);
         $response->assertRedirect('books/' . $book->id);
     }
 
@@ -79,12 +75,8 @@ class BookReservationTest extends TestCase
      */
     public function a_book_can_be_deleted()
     {
-        $this->post('books', [
-            'title' => 'Cool Book Title',
-            'author' => 'hui-ho',
-        ]);
+        $book = factory(Book::class)->create();
 
-        $book = Book::first();
         $this->assertCount(1, Book::all());
 
         $response = $this->delete('books/' . $book->id);
