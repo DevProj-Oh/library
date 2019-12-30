@@ -1,5 +1,3 @@
 <?php
 
-Route::post('/books', 'BooksController@store');
-Route::patch('/books/{book}', 'BooksController@update');
-Route::delete('/books/{book}', 'BooksController@destroy');
+Route::resource('books', 'BooksController', ['only' => ['index', 'show', 'store', 'update', 'destroy']]);

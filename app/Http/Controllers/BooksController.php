@@ -11,19 +11,19 @@ class BooksController extends Controller
     {
         $book = Book::create($request->validated());
 
-        return redirect('books/' . $book->id);
+        return redirect(route('books.show', $book));
     }
 
     public function update(Book $book, BookRequest $request)
     {
         $book->update($request->validated());
 
-        return redirect('books/' . $book->id);
+        return redirect(route('books.show', $book));
     }
 
     public function destroy(Book $book)
     {
         $book->delete();
-        return redirect('books');
+        return redirect(route('books.index'));
     }
 }

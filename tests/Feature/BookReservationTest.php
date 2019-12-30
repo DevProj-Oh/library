@@ -15,7 +15,7 @@ class BookReservationTest extends TestCase
      */
     public function a_book_can_be_added_to_the_library()
     {
-        $response = $this->post('books', [
+        $response = $this->post(route('books.store'), [
             'title' => 'Cool Book Title',
             'author' => 'hui-ho',
         ]);
@@ -23,7 +23,7 @@ class BookReservationTest extends TestCase
         $book = Book::first();
 
         $this->assertCount(1, Book::all());
-        $response->assertRedirect('books/' . $book->id);
+        $response->assertRedirect(route('books.show', $book));
     }
 
     /**
@@ -59,7 +59,7 @@ class BookReservationTest extends TestCase
     {
         $book = factory(Book::class)->create();
 
-        $response = $this->patch('books/' . $book->id, [
+        $response = $this->patch(route('books.update', $book), [
             'title' => 'New Title',
             'author' => 'New Author',
         ]);
@@ -67,21 +67,20 @@ class BookReservationTest extends TestCase
         $book->refresh();
         $this->assertEquals('New Title', $book->title);
         $this->assertEquals('New Author', $book->author);
-        $response->assertRedirect('books/' . $book->id);
+        $response->assertRedirect(route('books.show', $book));
     }
 
     /**
      * @test
      */
-    public function a_book_can_be_deleted()
+    public function a_book_can_be_deleted_test()
     {
         $book = factory(Book::class)->create();
-
         $this->assertCount(1, Book::all());
 
-        $response = $this->delete('books/' . $book->id);
+        $response = $this->delete(route('books.destroy', $book));
 
         $this->assertCount(0, Book::all());
-        $response->assertRedirect('books');
+        $response->assertRedirect(route('books.index'));
     }
 }
